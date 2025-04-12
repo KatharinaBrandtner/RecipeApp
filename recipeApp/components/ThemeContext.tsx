@@ -2,23 +2,26 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { lightTheme, darkTheme } from '../theme/theme';
 
+const ThemeContext = createContext<any>(null);  // Der Kontext muss korrekt initialisiert sein
 
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+  const [isDarkMode, setIsDarkMode] = useState(false);  // Standardwert für hellen Modus
 
+  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
-const ThemeContext = createContext<any>(null); //erstellt Kontext mit startwert null (wird durch themeprovider geändert)
-
-export const ThemeProvider = ({ children }: { children: ReactNode }) => { //themprovider gibt kontext bzw verwaltete die aktuelle state von light/dark
-  const [isDarkMode, setIsDarkMode] = useState(false); //app startet im hell modus
-
-  const toggleDarkMode = () => setIsDarkMode(prev => !prev); //zustan umdrehen auf false bzw true
-
-  const theme = isDarkMode ? darkTheme : lightTheme; //theme wenn drak dann dark sonst light
+  const theme = isDarkMode ? darkTheme : lightTheme;
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode, theme }}>
+    <ThemeContext.Provider value={{ theme, isDarkMode, toggleDarkMode }}>
       {children}
     </ThemeContext.Provider>
   );
 };
 
-export const useTheme = () => useContext(ThemeContext); //useTheme-Hook andere Komponenten auf aktuellen Modus und Design zugreifen
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};
