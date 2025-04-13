@@ -49,6 +49,10 @@ function RootLayoutNav() {
       <NavigationThemeProvider value={colorScheme === 'light' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen 
+            name="my/[id]" 
+            options={{ title: 'Rezeptdetails', headerBackTitle: 'Zurück' }} 
+          />
         </Stack>
       </NavigationThemeProvider>
     </ThemeProvider>
