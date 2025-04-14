@@ -1,7 +1,10 @@
+// read out loud imolemnetieren
+
 import { View, Text, Image, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/components/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
 
 const SearchDetailScreen = () => {
   const { id } = useLocalSearchParams();
@@ -40,8 +43,11 @@ const SearchDetailScreen = () => {
      <ImageBackground source={backgroundImage} style={styles.background}>
         <ScrollView contentContainerStyle={styles.container}>
           <Image source={{ uri: recipe.strMealThumb }} style={styles.image} />
-          <Text style={styles.title}>{recipe.strMeal}</Text>
-          <Text style={styles.instructions}>{recipe.strInstructions}</Text>
+          <Text style={[styles.title, theme.typography.h1, {color: theme.colors.black}]}>{recipe.strMeal}</Text>
+          <Text style={[styles.area, theme.typography.small, {color: theme.colors.black}]}>{recipe.strCategory} | {recipe.strArea}</Text>
+          <View style={[styles.separator, { backgroundColor: theme.colors.black }]} />
+          <Text style={[styles.loud, theme.typography.small, {color: theme.colors.black}]}><Ionicons name="megaphone-outline" size={16} color={theme.colors.black} /> Read out loud</Text>
+          <Text style={[theme.typography.body,  {color: theme.colors.black}]}>{recipe.strInstructions}</Text>
         </ScrollView>
     </ImageBackground>
   );
@@ -70,11 +76,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: 0,
   },
-  instructions: {
-    fontSize: 16,
-    lineHeight: 22,
+  area: {
+    marginBottom: 10,
+  },
+  loud: {
+    marginBottom: 10,
+    textDecorationLine: 'underline',
+  },
+  separator: {
+    height: 1,
+    marginTop: 0,
+    marginBottom: 20,
   },
 });
 

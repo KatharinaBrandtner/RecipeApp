@@ -30,9 +30,9 @@ const RecipeDetail = () => {
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
     <ScrollView style={styles.container}>
-      <Text style={[styles.title, { color: theme.colors.black }]}>{recipe.name}</Text>
       <Image source={{ uri: recipe.image }} style={styles.image} />
-      <Text style={[styles.description, { color: theme.colors.grey }]}>{recipe.description}</Text>
+      <Text style={[styles.title, theme.typography.h1, { color: theme.colors.black }]}>{recipe.name}</Text>
+      <Text style={[theme.typography.body,  { color: theme.colors.black }]}>{recipe.description}</Text>
     </ScrollView>
     </ImageBackground>
   );
@@ -50,8 +50,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 26,
-    fontWeight: 'bold',
     marginBottom: 20,
   },
   image: {
@@ -59,9 +57,5 @@ const styles = StyleSheet.create({
     height: 250,
     borderRadius: 12,
     marginBottom: 20,
-  },
-  description: {
-    fontSize: 16,
-    lineHeight: 24,
   },
 });
