@@ -1,3 +1,4 @@
+// wenn kein image selectet dann beisoiel bild aus image dolder anbinden
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, Pressable, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';

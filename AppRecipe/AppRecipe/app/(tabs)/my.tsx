@@ -70,10 +70,10 @@ const MyRecipesScreen = () => {
         </TouchableOpacity>
 
         <View style={styles.textContainer}>
-          <Text style={[styles.title, { color: theme.colors.black }]}>{item.name}</Text>
+          <Text style={[styles.title, theme.typography.bigger, { color: theme.colors.black }]}>{item.name}</Text>
           <Text
-            style={[styles.description, { color: theme.colors.grey }]}
-            numberOfLines={3}
+            style={[styles.description, theme.typography.body, { color: theme.colors.black }]}
+            numberOfLines={2}
             ellipsizeMode="tail">
             {item.description}
           </Text>
@@ -81,10 +81,10 @@ const MyRecipesScreen = () => {
       </View>
 
       <TouchableOpacity onPress={() => deleteRecipe(item.id)} style={styles.deleteButton}>
-        <Ionicons name="trash-outline" size={24} color={theme.colors.red} />
+        <Ionicons name="trash-outline" size={24} color={theme.colors.black} />
       </TouchableOpacity>
 
-      <View style={[styles.separator, { backgroundColor: theme.colors.grey }]} />
+      <View style={[styles.separator, { backgroundColor: theme.colors.black }]} />
     </View>
     </TouchableOpacity>
   );
@@ -93,16 +93,15 @@ const MyRecipesScreen = () => {
     <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={[styles.heading, { color: theme.colors.black }]}>My Recipes</Text>
+          <Text style={[theme.typography.h1, { color: theme.colors.black }]}>My Recipes</Text>
           
-          {/* Refresh Button */}
           <TouchableOpacity onPress={loadRecipes} style={styles.refreshButton}>
             <Ionicons name="refresh-outline" size={24} color={theme.colors.black} />
           </TouchableOpacity>
         </View>
 
         {recipes.length === 0 ? (
-          <Text style={[styles.emptyText, { color: theme.colors.grey }]}>
+          <Text style={[styles.emptyText, theme.typography.body, { color: theme.colors.black }]}>
             Noch keine Rezepte gespeichert.
           </Text>
         ) : (
@@ -148,21 +147,14 @@ const styles = StyleSheet.create({
   },
   refreshButton: {
     padding: 10,
-    backgroundColor: '#e0e0e0',
     borderRadius: 5,
   },
-  heading: {
-    fontSize: 32,
-    fontWeight: 'bold',
-  },
   emptyText: {
-    fontSize: 18,
-    textAlign: 'center',
     marginTop: 40,
   },
   card: {
     flexDirection: 'column',
-    marginBottom: 20,
+    marginBottom: 0,
     padding: 16,
     borderRadius: 10,
     backgroundColor: 'transparent',
@@ -183,17 +175,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 18,
     fontWeight: '600',
     marginBottom: 4,
   },
   description: {
     fontSize: 14,
-    color: '#666',
   },
   separator: {
     height: 1,
-    marginTop: 10,
+    marginTop: 20,
+    marginBottom: 0,
   },
   modalContainer: {
     flex: 1,
