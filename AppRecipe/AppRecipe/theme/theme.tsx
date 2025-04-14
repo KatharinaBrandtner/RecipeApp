@@ -23,6 +23,11 @@ export const lightTheme = {
       fontWeight: '400',
       lineHeight: 24,  
     },
+    bigger: {
+      fontSize: 20,
+      fontWeight: '600',
+      lineHeight: 24,  
+    },
     smalllink: {
       fontFamily: 'Inter',
       fontSize: 20,
@@ -30,6 +35,13 @@ export const lightTheme = {
       lineHeight: 24,  
       letterSpacing: 0.5,  
       textDecorationLine: 'underline',
+    },
+    small: {
+      fontFamily: 'Inter',
+      fontSize: 14,
+      fontWeight: '400',
+      lineHeight: 24,  
+      letterSpacing: 0.5, 
     },
   },
 };
