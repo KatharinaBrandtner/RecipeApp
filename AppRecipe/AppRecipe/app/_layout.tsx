@@ -51,7 +51,11 @@ function RootLayoutNav() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen 
             name="my/[id]" 
-            options={{ title: 'Rezeptdetails', headerBackTitle: 'Zurück' }} 
+            options={{ title: 'recipe deatails', headerBackTitle: 'back' }} 
+          />
+          <Stack.Screen 
+            name="search/[id]" 
+            options={{ title: 'recipe deatails MealDB', headerBackTitle: 'back' }} 
           />
         </Stack>
       </NavigationThemeProvider>
