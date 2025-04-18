@@ -5,6 +5,8 @@ import {
 } from 'react-native';
 import { useTheme } from '@/components/0ThemeContext';
 import { useRouter } from 'expo-router';
+import RecipeCard from '@/components/0RecipeCard';
+
 
 interface Meal {
   idMeal: string;
@@ -42,9 +44,9 @@ export default function SearchRecipes(){
     setIsLoading(true);
     try {
       const queries = [
-        `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`,     // Name
-        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${searchTerm}`,     // Kategorie
-        `https://www.themealdb.com/api/json/v1/1/filter.php?a=${searchTerm}`,     // Area
+        `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`,     
+        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${searchTerm}`,     
+        `https://www.themealdb.com/api/json/v1/1/filter.php?a=${searchTerm}`,   
       ];
   
       const responses = await Promise.all(queries.map(url => fetch(url)));
@@ -54,7 +56,7 @@ export default function SearchRecipes(){
       const mealsByCategory = jsonData[1].meals || [];
       const mealsByArea = jsonData[2].meals || [];
   
-      // 👇 Kombiniere und filtere Duplikate per ID
+      // Kombiniere und filtere Duplikate per ID
       const allMeals = [...mealsByName, ...mealsByCategory, ...mealsByArea];
       const uniqueMeals = Object.values(
         allMeals.reduce((acc: any, meal: any) => {
@@ -63,8 +65,7 @@ export default function SearchRecipes(){
         }, {})
       );
   
-      // 👉 wenn `filter.php` verwendet wird, fehlt `strInstructions`
-      // ➤ hole vollständige Details nach
+      // wenn `filter.php` verwendet wird, fehlt `strInstructions` -> hole vollständige Details nach
       const detailedMeals = await Promise.all(
         uniqueMeals.map(async (meal: any) => {
           if (!meal.strInstructions) {
@@ -182,19 +183,15 @@ export default function SearchRecipes(){
   );
 
   const renderItem = ({ item }: { item: Meal }) => (
-    <TouchableOpacity onPress={() => router.push(`/search/${item.idMeal}`)}>
-      <View style={styles.card}>
-        <TouchableOpacity onPress={() => setSelectedImage(item.strMealThumb)}>
-          <Image source={{ uri: item.strMealThumb }} style={styles.image} />
-        </TouchableOpacity>
-        <View style={styles.content}>
-          <Text style={styles.title}>{item.strMeal}</Text>
-          <Text numberOfLines={2} style={styles.description}>
-            {item.strInstructions}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+    <RecipeCard
+      id={Number(item.idMeal)}
+      name={item.strMeal}
+      description={item.strInstructions}
+      image={item.strMealThumb}
+      onDelete={() => {}}
+      onPress={() => router.push(`/search/${item.idMeal}`)}
+      onImagePress={() => setSelectedImage(item.strMealThumb)}
+    />
   );
 
   return (
@@ -214,17 +211,15 @@ export default function SearchRecipes(){
         </View>
 
         {isLoading ? (
-          <Text style={styles.loadingText}>Suche läuft...</Text>
+          <Text style={styles.loadingText}>searching...</Text>
         ) : results.length === 0 && query.trim().length > 1 ? (
-          <Text style={styles.loadingText}>Keine Ergebnisse gefunden.</Text>
+          <Text style={styles.loadingText}>no results</Text>
         ) : (
           <FlatList
             data={results}
             keyExtractor={(item) => item.idMeal}
             renderItem={renderItem}
-            ItemSeparatorComponent={() => (
-              <View style={styles.separatorCards} />
-            )}
+            
             contentContainerStyle={{ paddingBottom: 100 }}
           />
         )}

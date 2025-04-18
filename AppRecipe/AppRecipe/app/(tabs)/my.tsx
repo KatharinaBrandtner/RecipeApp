@@ -13,7 +13,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@/components/0ThemeContext";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useRecipes } from "@/components/0RecipeContext";
+import RecipeCard from '@/components/0RecipeCard';
 
 interface Recipe {
   id: number;
@@ -26,102 +27,50 @@ export default function MyRecipesScreen() {
   const { isDarkMode, theme } = useTheme();
   const router = useRouter();
 
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { recipes, deleteRecipe, loadRecipes } = useRecipes(); 
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const backgroundImage = isDarkMode
     ? require("../../assets/images/my-bg-bw.png")
     : require("../../assets/images/my-bg-color.png");
 
-  // Funktion zum Laden der Rezepte
-  const loadRecipes = async () => {
-    try {
-      const storedRecipes = await AsyncStorage.getItem("recipes");
-      if (storedRecipes) {
-        setRecipes(JSON.parse(storedRecipes));
-      }
-    } catch (error) {
-      console.error("Fehler beim Laden der Rezepte:", error);
-    }
-  };
-
   useEffect(() => {
-    loadRecipes();
-  }, []);
-
-  const deleteRecipe = async (id: number) => {
-    try {
-      const filteredRecipes = recipes.filter((recipe) => recipe.id !== id);
-      await AsyncStorage.setItem("recipes", JSON.stringify(filteredRecipes));
-      setRecipes(filteredRecipes);
-    } catch (error) {
-      console.error("Fehler beim Löschen des Rezepts:", error);
-    }
-  };
+    loadRecipes(); 
+  }, [loadRecipes]);
 
   const renderRecipe = ({ item }: { item: Recipe }) => (
-    <TouchableOpacity onPress={() => router.push(`/my/${item.id}`)}>
-      <View style={styles.card}>
-        <View style={styles.cardContent}>
-          <TouchableOpacity onPress={() => setSelectedImage(item.image)}>
-            <Image source={{ uri: item.image }} style={styles.imageCard} />
-          </TouchableOpacity>
-
-          <View style={styles.textContainer}>
-            <Text
-              style={[
-                styles.middle,
-                theme.typography.bigger,
-                { color: theme.colors.black },
-              ]}
-            >
-              {item.name}
-            </Text>
-            <Text
-              style={[
-                
-                theme.typography.body,
-                { color: theme.colors.black },
-              ]}
-              numberOfLines={2}
-              ellipsizeMode="tail"
-            >
-              {item.description}
-            </Text>
-          </View>
-        </View>
-
-        <TouchableOpacity
-          onPress={() => deleteRecipe(item.id)}
-          style={styles.deleteButton}
-        >
-          <Ionicons name="trash-outline" size={24} color={theme.colors.black} />
-        </TouchableOpacity>
-
-        <View
-          style={[
-            styles.separatorCards,
-            { backgroundColor: theme.colors.black },
-          ]}
-        />
-      </View>
-    </TouchableOpacity>
+    <RecipeCard
+      id={item.id}
+      name={item.name}
+      description={item.description}
+      image={item.image}
+      onDelete={() => deleteRecipe(item.id)}
+      onPress={() => router.push(`/my/${item.id}`)}
+      onImagePress={() => setSelectedImage(item.image)}
+    />
   );
+  
 
   const [sortOption, setSortOption] = useState("newest");
 
   const sortRecipes = (list: Recipe[], option: string): Recipe[] => {
+    let sortedList = [...list];
     switch (option) {
       case "a-z":
-        return [...list].sort((a, b) => a.name.localeCompare(b.name));
+        sortedList = sortedList.sort((a, b) => a.name.localeCompare(b.name));
+        break;
       case "z-a":
-        return [...list].sort((a, b) => b.name.localeCompare(a.name));
+        sortedList = sortedList.sort((a, b) => b.name.localeCompare(a.name));
+        break;
       case "oldest":
-        return [...list].sort((a, b) => a.id - b.id);
+        sortedList = sortedList.sort((a, b) => a.id - b.id);
+        break;
       case "newest":
       default:
-        return [...list].sort((a, b) => b.id - a.id);
+        sortedList = sortedList.sort((a, b) => b.id - a.id);
+        break;
     }
+    return sortedList;
   };
 
   const sortedRecipes = sortRecipes(recipes, sortOption);
@@ -136,18 +85,13 @@ export default function MyRecipesScreen() {
           ...theme.container,
         },
         h1: {
-          ...theme.typography.h1,
-          color: theme.colors.black,
+          ...theme.typography.h1, color: theme.colors.black,
         },
         header: {
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 20,
+          flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20,
         },
         refreshButton: {
-          padding: 10,
-          borderRadius: 5,
+          padding: 10, borderRadius: 5,
         },
         emptyText: {
           marginTop: 40,
@@ -155,13 +99,19 @@ export default function MyRecipesScreen() {
           color: theme.colors.black,
         },
         card: {
-          ...theme.card,
+          marginBottom: 10,
+          borderRadius: 10,
+          overflow: "hidden",
+          backgroundColor: 'transparent'
         },
         cardContent: {
-          ...theme.cardContent,
+          flexDirection: "row",
+          padding: 15,
         },
         imageCard: {
-          ...theme.imageCard,
+          width: 80,
+          height: 80,
+          borderRadius: 10,
         },
         textContainer: {
           flex: 1,
@@ -173,9 +123,9 @@ export default function MyRecipesScreen() {
           marginBottom: 4,
           ...theme.typography.body,
         },
-        
         separatorCards: {
-          ...theme.separatorCards,
+          height: 1,
+          marginTop: 10,
         },
         modalContainer: {
           flex: 1,
@@ -214,74 +164,34 @@ export default function MyRecipesScreen() {
       }),
     [theme]
   );
+  
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.h1}>My Recipes</Text>
-
           <TouchableOpacity onPress={loadRecipes} style={styles.refreshButton}>
-            <Ionicons
-              name="refresh-outline"
-              size={24}
-              color={theme.colors.black}
-            />
+            <Ionicons name="refresh-outline" size={24} color={theme.colors.black} />
           </TouchableOpacity>
         </View>
 
         <View style={styles.sortingContainer}>
-          <Text
-            style={[
-              theme.typography.body,
-              { color: theme.colors.black, marginRight: 8 },
-            ]}
-          >
-            Sort:
-          </Text>
-
+          <Text style={[theme.typography.body, { color: theme.colors.black, marginRight: 8 }]}>Sort:</Text>
           <TouchableOpacity onPress={() => setSortOption("newest")}>
-            <Text
-              style={[
-                styles.sortOption,
-                sortOption === "newest" && styles.activeSort,
-              ]}
-            >
-              newest
-            </Text>
+            <Text style={[styles.sortOption, sortOption === "newest" && styles.activeSort]}>newest</Text>
           </TouchableOpacity>
           <Text style={styles.divider}>|</Text>
           <TouchableOpacity onPress={() => setSortOption("oldest")}>
-            <Text
-              style={[
-                styles.sortOption,
-                sortOption === "oldest" && styles.activeSort,
-              ]}
-            >
-              oldest
-            </Text>
+            <Text style={[styles.sortOption, sortOption === "oldest" && styles.activeSort]}>oldest</Text>
           </TouchableOpacity>
           <Text style={styles.divider}>|</Text>
           <TouchableOpacity onPress={() => setSortOption("a-z")}>
-            <Text
-              style={[
-                styles.sortOption,
-                sortOption === "a-z" && styles.activeSort,
-              ]}
-            >
-              A-Z
-            </Text>
+            <Text style={[styles.sortOption, sortOption === "a-z" && styles.activeSort]}>A-Z</Text>
           </TouchableOpacity>
           <Text style={styles.divider}>|</Text>
           <TouchableOpacity onPress={() => setSortOption("z-a")}>
-            <Text
-              style={[
-                styles.sortOption,
-                sortOption === "z-a" && styles.activeSort,
-              ]}
-            >
-              Z-A
-            </Text>
+            <Text style={[styles.sortOption, sortOption === "z-a" && styles.activeSort]}>Z-A</Text>
           </TouchableOpacity>
         </View>
 

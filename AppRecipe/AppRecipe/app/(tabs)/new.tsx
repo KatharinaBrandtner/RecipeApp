@@ -9,13 +9,16 @@ import {
   ImageBackground,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@/components/0ThemeContext";
+import { useRecipes  } from "@/components/0RecipeContext";
+
 
 const fallbackImage = require("../../assets/images/placeholder_food.png");
 
 export default function NewRecipeScreen() {
   const { isDarkMode, theme } = useTheme();
+
+  const { addRecipe } = useRecipes();
 
   const backgroundImage = isDarkMode
     ? require("../../assets/images/new-bg-bw.png")
@@ -43,19 +46,11 @@ export default function NewRecipeScreen() {
       description,
       image: image ?? Image.resolveAssetSource(fallbackImage).uri,
     };
-
-    try {
-      const existing = await AsyncStorage.getItem("recipes");
-      const recipes = existing ? JSON.parse(existing) : [];
-      const updated = [...recipes, newRecipe];
-      await AsyncStorage.setItem("recipes", JSON.stringify(updated));
-      alert("Recipe saved!");
-      setName("");
-      setDescription("");
-      setImage(null);
-    } catch (e) {
-      console.error("Error saving recipe:", e);
-    }
+    addRecipe(newRecipe);
+    setName("");
+    setDescription("");
+    setImage(null);
+    alert("Recipe saved!");
   };
 
   const styles = useMemo(
