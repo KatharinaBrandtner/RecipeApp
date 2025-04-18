@@ -4,7 +4,7 @@ import {
   ImageBackground, TouchableOpacity
 } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { useTheme } from '@/components/ThemeContext';
+import { useTheme } from '@/components/0ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 

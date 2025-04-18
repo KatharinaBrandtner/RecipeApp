@@ -6,7 +6,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { useTheme } from "../../components/ThemeContext";
+import { useTheme } from "../../components/0ThemeContext";
 
 export default function HomeScreen() {
   const { isDarkMode, toggleDarkMode, theme } = useTheme();

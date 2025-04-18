@@ -3,7 +3,7 @@ import {
   View, Text, TextInput, FlatList, Image, TouchableOpacity,
   StyleSheet, ImageBackground, Modal
 } from 'react-native';
-import { useTheme } from '@/components/ThemeContext';
+import { useTheme } from '@/components/0ThemeContext';
 import { useRouter } from 'expo-router';
 
 interface Meal {

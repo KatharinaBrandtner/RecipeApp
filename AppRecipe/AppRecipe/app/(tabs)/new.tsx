@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useTheme } from "@/components/ThemeContext";
+import { useTheme } from "@/components/0ThemeContext";
 
 const fallbackImage = require("../../assets/images/placeholder_food.png");
 

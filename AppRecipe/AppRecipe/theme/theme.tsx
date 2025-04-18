@@ -71,16 +71,16 @@ imageCard: {
   borderRadius: 10
 },
 card: {
-flexDirection: 'column',
-marginBottom: 0,
-padding: 16,
-borderRadius: 10,
-backgroundColor: 'transparent',
+  flexDirection: 'column',
+  marginBottom: 0,
+  padding: 16,
+  borderRadius: 10,
+  backgroundColor: 'transparent',
 },
 cardContent: {
-flexDirection: 'row',
-justifyContent: 'flex-start',
-alignItems: 'center',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
 },
 separatorCards: {
   height: 1,
@@ -158,16 +158,16 @@ imageCard: {
   borderRadius: 10
 },
 card: {
-flexDirection: 'column',
-marginBottom: 0,
-padding: 16,
-borderRadius: 10,
-backgroundColor: 'transparent',
+  flexDirection: 'column',
+  marginBottom: 0,
+  padding: 16,
+  borderRadius: 10,
+  backgroundColor: 'transparent',
 },
 cardContent: {
-flexDirection: 'row',
-justifyContent: 'flex-start',
-alignItems: 'center',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
 },
 separatorCards: {
   height: 1,
