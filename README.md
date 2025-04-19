@@ -54,7 +54,7 @@ npx expo start
 
 ---
 
-## 📸 Screenshots (add your own)
+## 📸 Screenshots 
 
 ```
 ![Home color mode](/readme_images/home-c.png)
