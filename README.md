@@ -56,10 +56,7 @@ npx expo start
 
 ## 📸 Screenshots 
 
-```
 ![Home color mode](/readme_images/home-c.png)
 ![Home bkack/white mode](/readme_images/homebw.png)
 ![my recipes](/readme_images/my-c.png)
 ![detail page](/readme_images/detail-c.png)
-
-```
