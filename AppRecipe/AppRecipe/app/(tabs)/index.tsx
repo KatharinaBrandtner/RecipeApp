@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
+  Image
 } from "react-native";
 import { useTheme } from "../../components/0ThemeContext";
 
@@ -33,6 +34,11 @@ export default function HomeScreen() {
           ...theme.typography.link,
           color: theme.colors.back,
         },
+        chef:{
+           width: 60, 
+           height: 90,
+           resizeMode: 'contain'
+        }
       }),
     [theme],
   );
@@ -62,6 +68,14 @@ export default function HomeScreen() {
           home made{"\n"}
           meals
         </Text>
+        <Image
+          style={styles.chef}
+          source={
+            isDarkMode
+              ? require('../../assets/images/chef-bw.png') 
+              : require('../../assets/images/chef.png')    
+          }
+        />
 
       </View>
       
