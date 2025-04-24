@@ -57,7 +57,7 @@ npx expo start
 ## 📸 Screenshots 
 
 ![Home screen](/readme_images/home.JPEG)
-![New recipe](/readme_images/new.JPEG)
+![New recipe](/readme_images/new.jpeg)
 ![My recipes](/readme_images/my.JPEG)
 ![Searched recipes](/readme_images/search.JPEG)
 ![Detail page](/readme_images/detail.JPEG)
