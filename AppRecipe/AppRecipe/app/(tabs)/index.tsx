@@ -5,9 +5,10 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
-  Image
+  Image,
 } from "react-native";
 import { useTheme } from "../../components/0ThemeContext";
+import Heading from "../../components/0Title";
 
 export default function HomeScreen() {
   const { isDarkMode, toggleDarkMode, theme } = useTheme();
@@ -24,33 +25,26 @@ export default function HomeScreen() {
         container: {
           ...theme.container,
         },
-        h1: {
-          marginBottom: 10,
-          ...theme.typography.h1,
-          color: theme.colors.black,
-        },
         toggleText: {
           marginBottom: 30,
           ...theme.typography.link,
           color: theme.colors.back,
         },
-        chef:{
-           width: 60, 
-           height: 90,
-           resizeMode: 'contain'
-        }
+        chef: {
+          width: 60,
+          height: 90,
+          resizeMode: "contain",
+        },
       }),
-    [theme],
+    [theme]
   );
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
-      
       <View style={styles.container}>
-
-        <Text style={[styles.h1]}>
-          Digital{"\n"}Cook{"\n"}Book
-        </Text>
+        <Heading withMargin={false} text="Digital" />
+        <Heading withMargin={false} text="Cook" />
+        <Heading withMargin={true} text="Book" />
 
         <TouchableOpacity onPress={toggleDarkMode}>
           <Text style={[styles.toggleText]}>
@@ -59,26 +53,23 @@ export default function HomeScreen() {
           </Text>
         </TouchableOpacity>
 
-        <Text style={[styles.h1]}>
-          Here you can{"\n"}
-          find and{"\n"}
-          collect the{"\n"}
-          best recipes{"\n"}
-          for your{"\n"}
-          home made{"\n"}
-          meals
-        </Text>
+        <Heading withMargin={false} text="Here you can" />
+        <Heading withMargin={false} text="find and" />
+        <Heading withMargin={false} text="collect the" />
+        <Heading withMargin={false} text="best recipes" />
+        <Heading withMargin={false} text="for your" />
+        <Heading withMargin={false} text="home made" />
+        <Heading withMargin={true} text="meals" />
+
         <Image
           style={styles.chef}
           source={
             isDarkMode
-              ? require('../../assets/images/chef-bw.png') 
-              : require('../../assets/images/chef.png')    
+              ? require("../../assets/images/chef-bw.png")
+              : require("../../assets/images/chef.png")
           }
         />
-
       </View>
-      
     </ImageBackground>
   );
 }

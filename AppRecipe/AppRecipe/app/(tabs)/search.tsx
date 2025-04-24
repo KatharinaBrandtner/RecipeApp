@@ -6,7 +6,7 @@ import {
 import { useTheme } from '@/components/0ThemeContext';
 import { useRouter } from 'expo-router';
 import RecipeCard from '@/components/0RecipeCard';
-
+import CustomButton from '@/components/0Button';
 
 interface Meal {
   idMeal: string;
@@ -55,8 +55,7 @@ export default function SearchRecipes(){
       const mealsByName = jsonData[0].meals || [];
       const mealsByCategory = jsonData[1].meals || [];
       const mealsByArea = jsonData[2].meals || [];
-  
-      // Kombiniere und filtere Duplikate per ID
+
       const allMeals = [...mealsByName, ...mealsByCategory, ...mealsByArea];
       const uniqueMeals = Object.values(
         allMeals.reduce((acc: any, meal: any) => {
@@ -64,8 +63,7 @@ export default function SearchRecipes(){
           return acc;
         }, {})
       );
-  
-      // wenn `filter.php` verwendet wird, fehlt `strInstructions` -> hole vollständige Details nach
+      
       const detailedMeals = await Promise.all(
         uniqueMeals.map(async (meal: any) => {
           if (!meal.strInstructions) {
@@ -119,54 +117,15 @@ export default function SearchRecipes(){
         borderColor: theme.colors.black,
         backgroundColor: 'transparent'
       },
-      card: {
-        flexDirection: 'row',
-        marginBottom: 20,
-      },
-      image: {
-        ...theme.imageCard,
-        marginRight: 12,
-      },
-      content: {
-        flex: 1,
-        justifyContent: 'center',
-      },
-      title: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: theme.colors.black,
-      },
-      description: {
-        ...theme.typography.body,
-        color: theme.colors.black,
-      },
       row: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
         gap: 10,
       },
-      randomButton: {
-        backgroundColor: theme.colors.blue_search,
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginBottom: 20,
-      },
-      randomButtonText: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: theme.colors.white_search,
-      },
       loadingText: {
         color: theme.colors.black,
         marginTop: 20,
-      },
-      separatorCards: {
-        height: 1,
-        marginBottom: 20,
-        backgroundColor: theme.colors.black,
       },
       modalContainer: {
         flex: 1,
@@ -191,6 +150,7 @@ export default function SearchRecipes(){
       onDelete={() => {}}
       onPress={() => router.push(`/search/${item.idMeal}`)}
       onImagePress={() => setSelectedImage(item.strMealThumb)}
+      showDeleteButton={false}
     />
   );
 
@@ -205,9 +165,7 @@ export default function SearchRecipes(){
             placeholderTextColor={theme.colors.black}
             style={styles.input}
           />
-          <TouchableOpacity style={styles.randomButton} onPress={getRandomRecipe}>
-            <Text style={styles.randomButtonText}>Random</Text>
-          </TouchableOpacity>
+          <CustomButton type="random" text="Random" onPress={getRandomRecipe} />
         </View>
 
         {isLoading ? (

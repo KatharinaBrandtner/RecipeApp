@@ -7,11 +7,14 @@ import {
   Pressable,
   StyleSheet,
   ImageBackground,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useTheme } from "@/components/0ThemeContext";
-import { useRecipes  } from "@/components/0RecipeContext";
-
+import { useRecipes } from "@/components/0RecipeContext";
+import Heading from "../../components/0Title";
+import CustomButton from "../../components/0Button";
 
 const fallbackImage = require("../../assets/images/placeholder_food.png");
 
@@ -30,7 +33,7 @@ export default function NewRecipeScreen() {
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       quality: 1,
     });
 
@@ -50,7 +53,7 @@ export default function NewRecipeScreen() {
     setName("");
     setDescription("");
     setImage(null);
-    alert("Recipe saved!");
+    alert("Your recipe is saved :)");
   };
 
   const styles = useMemo(
@@ -61,11 +64,6 @@ export default function NewRecipeScreen() {
         },
         container: {
           ...theme.container,
-        },
-        heading: {
-          ...theme.typography.h1,
-          color: theme.colors.black,
-          marginBottom: 20,
         },
         inputContainer: {
           borderWidth: 1,
@@ -95,64 +93,46 @@ export default function NewRecipeScreen() {
           marginBottom: 20,
           borderRadius: 12,
         },
-        saveButton: {
-          color: theme.colors.black,
-          textAlign: "center",
-          borderWidth: 1,
-          borderColor: theme.colors.black,
-          borderRadius: 12,
-          paddingVertical: 14,
-          width: "100%",
-        },
       }),
     [theme]
   );
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.background}>
-      <View style={styles.container}>
-        <Text style={styles.heading}>New Recipe</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ImageBackground source={backgroundImage} style={styles.background}>
+        <View style={styles.container}>
+          <Heading withMargin={true} text="New Recipe" />
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Recipe Name"
-            value={name}
-            onChangeText={setName}
-            style={styles.input}
-            placeholderTextColor={theme.colors.black}
-          />
-          <View style={styles.divider} />
-          <TextInput
-            placeholder="Description"
-            value={description}
-            onChangeText={setDescription}
-            style={[styles.input, { height: 100, textAlignVertical: "top" }]}
-            placeholderTextColor={theme.colors.black}
-            multiline
-          />
-          <View style={styles.divider} />
-          <Pressable onPress={pickImage} style={styles.imagePicker}>
-            <Text style={{ color: theme.colors.black, fontSize: 16 }}>
-              {image ? "Image Selected" : "Select Image"}
-            </Text>
-          </Pressable>
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Recipe Name"
+              value={name}
+              onChangeText={setName}
+              style={styles.input}
+              placeholderTextColor={theme.colors.black}
+            />
+            <View style={styles.divider} />
+            <TextInput
+              placeholder="Description"
+              value={description}
+              onChangeText={setDescription}
+              style={[styles.input, { height: 100, textAlignVertical: "top" }]}
+              placeholderTextColor={theme.colors.black}
+              multiline
+            />
+            <View style={styles.divider} />
+            <Pressable onPress={pickImage} style={styles.imagePicker}>
+              <Text style={{ color: theme.colors.black, fontSize: 16 }}>
+                {image ? "Image Selected" : "Select Image"}
+              </Text>
+            </Pressable>
+          </View>
+
+          {image && <Image source={{ uri: image }} style={styles.preview} />}
+
+          <CustomButton type="save" text="Save" onPress={saveRecipe} />
         </View>
-        
-        {image && <Image source={{ uri: image }} style={styles.preview} />}
-
-        <Pressable onPress={saveRecipe}>
-          {({ pressed }) => (
-            <Text
-              style={[
-                styles.saveButton,
-                { fontWeight: pressed ? "bold" : "normal" },
-              ]}
-            >
-              Save
-            </Text>
-          )}
-        </Pressable>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </TouchableWithoutFeedback>
   );
 }
