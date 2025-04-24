@@ -31,18 +31,17 @@ export const RecipeProvider = ({ children }: { children: ReactNode }) => {
       console.error("Error adding recipe:", error);
     }
   };
-  
 
   const deleteRecipe = async (id: number) => {
     try {
       const updatedRecipes = recipes.filter((recipe) => recipe.id !== id);
       setRecipes(updatedRecipes);
-      await AsyncStorage.setItem("recipes", JSON.stringify(updatedRecipes)); 
+      await AsyncStorage.setItem("recipes", JSON.stringify(updatedRecipes));
     } catch (error) {
       console.error("Error deleting recipe:", error);
     }
   };
-  
+
   const loadRecipes = async () => {
     try {
       const savedRecipes = await AsyncStorage.getItem("recipes");
@@ -54,10 +53,11 @@ export const RecipeProvider = ({ children }: { children: ReactNode }) => {
       console.error("Error loading recipes:", error);
     }
   };
-  
 
   return (
-    <RecipeContext.Provider value={{ recipes, addRecipe, deleteRecipe, loadRecipes }}>
+    <RecipeContext.Provider
+      value={{ recipes, addRecipe, deleteRecipe, loadRecipes }}
+    >
       {children}
     </RecipeContext.Provider>
   );
