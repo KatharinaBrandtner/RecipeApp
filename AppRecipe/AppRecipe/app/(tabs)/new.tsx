@@ -11,8 +11,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useTheme } from "@/components/0ThemeContext";
-import { useRecipes } from "@/components/0RecipeContext";
+import { useTheme } from "@/app/contextprovider/0ThemeContext";
+import { useRecipes } from "@/app/contextprovider/0RecipeContext";
 import Heading from "../../components/0Title";
 import CustomButton from "../../components/0Button";
 
@@ -26,7 +26,8 @@ export default function NewRecipeScreen() {
   const backgroundImage = isDarkMode
     ? require("../../assets/images/new-bg-bw.png")
     : require("../../assets/images/new-bg-color.png");
-
+    
+//State manger usestate-hooks
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<string | null>(null);

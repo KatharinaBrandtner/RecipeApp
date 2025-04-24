@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { useTheme } from "./0ThemeContext";
+import { useTheme } from "../app/contextprovider/0ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 
 interface RecipeCardProps {
@@ -24,6 +24,8 @@ export default function RecipeCard({
   onPress,
   onImagePress,
 }: RecipeCardProps) {
+
+  //theme mikt hook benutzen
   const { isDarkMode, theme } = useTheme();
 
   return (
@@ -39,7 +41,7 @@ export default function RecipeCard({
               style={[
                 styles.middle,
                 theme.typography.bigger,
-                { color: isDarkMode ? theme.colors.black : theme.colors.black },
+                {color: theme.colors.black},
               ]}
             >
               {name}
@@ -47,7 +49,7 @@ export default function RecipeCard({
             <Text
               style={[
                 theme.typography.body,
-                { color: isDarkMode ? theme.colors.black : theme.colors.black },
+                { color: theme.colors.black },
               ]}
               numberOfLines={2}
               ellipsizeMode="tail"

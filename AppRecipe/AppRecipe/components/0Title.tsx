@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Text, StyleSheet } from "react-native";
-import { useTheme } from "./0ThemeContext";
+import { useTheme } from "../app/contextprovider/0ThemeContext";
 
 interface headingProps {
   text: string;

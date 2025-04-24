@@ -9,10 +9,10 @@ import {
   Modal,
   ImageBackground,
 } from "react-native";
-import { useTheme } from "@/components/0ThemeContext";
+import { useTheme } from "@/app/contextprovider/0ThemeContext";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useRecipes } from "@/components/0RecipeContext";
+import { useRecipes } from "@/app/contextprovider/0RecipeContext";
 import RecipeCard from "@/components/0RecipeCard";
 import Heading from "../../components/0Title";
 
@@ -205,7 +205,7 @@ export default function MyRecipesScreen() {
         </View>
 
         {recipes.length === 0 ? (
-          <Text style={styles.emptyText}>Noch keine Rezepte gespeichert.</Text>
+          <Text style={styles.emptyText}>No recipes saved :/</Text>
         ) : (
           <FlatList
             data={sortedRecipes}
@@ -215,10 +215,12 @@ export default function MyRecipesScreen() {
           />
         )}
 
-        <Modal visible={!!selectedImage} transparent animationType="fade">
+        {/*  sieht man nur wenn bild da ist, und !! stellt sicher das boolean wenn bild groß/klein*/}
+        <Modal visible={!!selectedImage} transparent animationType="fade"> 
           <TouchableOpacity
             style={styles.modalContainer}
-            onPress={() => setSelectedImage(null)}
+            onPress={() => setSelectedImage(null)} 
+            // bild wird klein (null)
           >
             <Image
               source={{ uri: selectedImage! }}

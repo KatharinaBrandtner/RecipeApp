@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, TouchableOpacity, Pressable, StyleSheet } from "react-native";
-import { useTheme } from "./0ThemeContext";
+import { useTheme } from "../app/contextprovider/0ThemeContext";
 
 type ButtonType = "random" | "save";
 

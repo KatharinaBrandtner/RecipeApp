@@ -1,11 +1,11 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '@/components/0ThemeContext';
-import { RecipeProvider } from "@/components/0RecipeContext";
+import { useTheme } from '@/app/contextprovider/0ThemeContext';
+import { RecipeProvider } from "@/app/contextprovider/0RecipeContext";
 
 export default function TabLayout() {
-  const { theme, isDarkMode, toggleDarkMode } = useTheme();
+  const { theme, isDarkMode} = useTheme();
 
   return (
     <RecipeProvider>  

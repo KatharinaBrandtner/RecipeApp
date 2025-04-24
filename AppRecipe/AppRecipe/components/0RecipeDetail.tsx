@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -8,10 +8,9 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import * as Speech from "expo-speech";
 import Heading from "./0Title";
-import { useTheme } from "./0ThemeContext";
+import { useTheme } from "../app/contextprovider/0ThemeContext";
 
 type Recipe = {
   name?: string;
@@ -41,16 +40,24 @@ export default function RecipeDetailView({
     ? require("../assets/images/detail-bg-bw.png")
     : require("../assets/images/detail-bg-color.png");
 
-  const speak = (text: string) => {
-    Speech.stop();
-    Speech.speak(text, {
-      language: "en-US",
-      rate: 1.0,
-    });
-  };
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const stopSpeaking = () => {
-    Speech.stop();
+    //handy darf nicht auf lautlos sein!
+  const toggleSpeech = (text: string) => {
+    if (isSpeaking) {
+      Speech.stop();
+      setIsSpeaking(false);
+    } else {
+      Speech.stop(); //verhindert überschnidung
+      Speech.speak(text, { //vorlesen
+        language: "en-US",
+        rate: 1.0,
+        onDone: () => setIsSpeaking(false), //zurücksetzen wenn fertig
+        onStopped: () => setIsSpeaking(false),
+        onError: () => setIsSpeaking(false),
+      });
+      setIsSpeaking(true);
+    }
   };
 
   const styles = useMemo(
@@ -110,6 +117,7 @@ export default function RecipeDetailView({
     [theme]
   );
 
+  //weil my recipe und mealdb unterschiedliche benennungen
   const title = recipe.name || recipe.strMeal;
   const image = recipe.image || recipe.strMealThumb;
   const description = recipe.description || recipe.strInstructions;
@@ -124,6 +132,7 @@ export default function RecipeDetailView({
           <Image source={{ uri: image }} style={styles.image} />
           <Heading withMargin={true} text={title || "No title"} />
 
+          {/* wenn Rezept aus Mealdb */}
           {source === "search" && (
             <Text style={styles.area}>
               {recipe.strCategory} | {recipe.strArea}
@@ -132,29 +141,12 @@ export default function RecipeDetailView({
 
           <View style={styles.separator} />
 
-          <View style={styles.row}>
-            <TouchableOpacity onPress={() => speak(description || "")}>
-              <Text style={styles.loud}>
-                <Ionicons
-                  name="megaphone-outline"
-                  size={16}
-                  color={theme.colors.black}
-                />{" "}
-                Read out loud
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.spacer} />
-            <TouchableOpacity onPress={stopSpeaking}>
-              <Text style={styles.loud}>
-                <Ionicons
-                  name="stop-outline"
-                  size={16}
-                  color={theme.colors.black}
-                />{" "}
-                Stop reading
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={() => toggleSpeech(description || "")}>
+            <Text style={styles.loud}>
+              {isSpeaking ? "Stop reading" : "Read out loud"}
+            </Text>
+          </TouchableOpacity>
+
 
           <Text style={styles.description}>{description}</Text>
         </View>

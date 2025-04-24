@@ -3,7 +3,7 @@ import {
   View, Text, TextInput, FlatList, Image, TouchableOpacity,
   StyleSheet, ImageBackground, Modal
 } from 'react-native';
-import { useTheme } from '@/components/0ThemeContext';
+import { useTheme } from '@/app/contextprovider/0ThemeContext';
 import { useRouter } from 'expo-router';
 import RecipeCard from '@/components/0RecipeCard';
 import CustomButton from '@/components/0Button';
@@ -23,23 +23,24 @@ export default function SearchRecipes(){
     ? require('../../assets/images/my-bg-bw.png')
     : require('../../assets/images/search-bg-color.png');
 
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<Meal[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState(''); //aktueller suchbegriff
+  const [results, setResults] = useState<Meal[]>([]); // ergebnisse in liste
+  const [isLoading, setIsLoading] = useState(false); //wird gerade gesucht?
   const [selectedImage, setSelectedImage] = useState<string|null>(null);
 
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      if (query.trim().length > 1) {
-        searchMeals(query);
+  useEffect(() => { //wenn sich such input ändert, wartet aber 600ms bis neu gesucht wird (debouncing)
+    const delayDebounce = setTimeout(() => { 
+      if (query.trim().length > 1) { //suche länger als 1 zeichen?
+        searchMeals(query); //suche wird durchgeführt
       } else {
-        setResults([]);
+        setResults([]); //wenn 0 zeichen dann leere suche
       }
     }, 600); 
 
-    return () => clearTimeout(delayDebounce);
-  }, [query]);
+    return () => clearTimeout(delayDebounce); //vorheriges timeout abgebrochen wenn weiter tippen 
+  }, [query]); //jedes mal wenn neues zeichen eingegeben
 
+  //suchen in mealdb, dublikate entfernt
   const searchMeals = async (searchTerm: string) => {
     setIsLoading(true);
     try {
@@ -49,21 +50,23 @@ export default function SearchRecipes(){
         `https://www.themealdb.com/api/json/v1/1/filter.php?a=${searchTerm}`,   
       ];
   
+      // Führt alle Abfragen gleichzeitig aus
       const responses = await Promise.all(queries.map(url => fetch(url)));
-      const jsonData = await Promise.all(responses.map(res => res.json()));
+      const jsonData = await Promise.all(responses.map(res => res.json())); //alles in json konvertiert
   
       const mealsByName = jsonData[0].meals || [];
       const mealsByCategory = jsonData[1].meals || [];
       const mealsByArea = jsonData[2].meals || [];
 
-      const allMeals = [...mealsByName, ...mealsByCategory, ...mealsByArea];
+      const allMeals = [...mealsByName, ...mealsByCategory, ...mealsByArea]; //kombi aller rezepte
       const uniqueMeals = Object.values(
-        allMeals.reduce((acc: any, meal: any) => {
-          acc[meal.idMeal] = meal;
+        allMeals.reduce((acc: any, meal: any) => { //löscht doppeltes durch idMeal gruppierung
+          acc[meal.idMeal] = meal; // idMeals als Key
           return acc;
         }, {})
       );
       
+      //alle nötogen infos bekommen für rezepte aus der liste
       const detailedMeals = await Promise.all(
         uniqueMeals.map(async (meal: any) => {
           if (!meal.strInstructions) {
@@ -75,11 +78,11 @@ export default function SearchRecipes(){
         })
       );
   
-      setResults(detailedMeals);
+      setResults(detailedMeals); //Setzt die Ergebnisse im State
     } catch (error) {
-      console.error('Fehler bei der API:', error);
+      console.error('Error with API:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); //Loading-Zustand wieder auf `false` wenn Anfrage abgeschlossen 
     }
   };
   
@@ -161,16 +164,16 @@ export default function SearchRecipes(){
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="Suche ein Rezept..."
+            placeholder="Search a recipe..."
             placeholderTextColor={theme.colors.black}
             style={styles.input}
           />
           <CustomButton type="random" text="Random" onPress={getRandomRecipe} />
         </View>
 
-        {isLoading ? (
+        {isLoading ? ( //isLoading true dann zeigt Ladeanzeige
           <Text style={styles.loadingText}>searching...</Text>
-        ) : results.length === 0 && query.trim().length > 1 ? (
+        ) : results.length === 0 && query.trim().length > 1 ? ( //wenn kein Ergebnis und input mehr als ein Zeichen
           <Text style={styles.loadingText}>no results</Text>
         ) : (
           <FlatList

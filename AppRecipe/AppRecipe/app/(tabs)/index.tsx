@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { useTheme } from "../../components/0ThemeContext";
+import { useTheme } from "../contextprovider/0ThemeContext";
 import Heading from "../../components/0Title";
 
 export default function HomeScreen() {
@@ -16,6 +16,7 @@ export default function HomeScreen() {
     ? require("../../assets/images/home-bg-bw.png")
     : require("../../assets/images/home-bg-color.png");
 
+    // style nur neu gerändert wenn sich theme ändert (performance besser, Hook)
   const styles = useMemo(
     () =>
       StyleSheet.create({
@@ -48,7 +49,7 @@ export default function HomeScreen() {
 
         <TouchableOpacity onPress={toggleDarkMode}>
           <Text style={[styles.toggleText]}>
-            Show {isDarkMode ? "color mode" : "black and white"}
+            Show {isDarkMode ? "color " : "black and white "}
             mode
           </Text>
         </TouchableOpacity>
