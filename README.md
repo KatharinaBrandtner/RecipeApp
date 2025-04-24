@@ -8,8 +8,6 @@ MyRecipe is a modern mobile app that allows users to search, view, and save cook
 
 - 🔍 **Search Recipes**: Find meals by name, category, or origin (area)
 - 📖 **View Recipe Details**: Including ingredients, instructions, and images
-- ❤️ **Save My Recipes**: Store your favorite recipes locally
-- 🏠 **Home Screen**: Displays quick links to features
 - ➕ **Add New Recipe**: Users can manually add their own recipes
 - 🌙 **Light/Dark Mode**: Toggleable theme support
 - 🧭 **Bottom Tab Navigation**: Seamless switch between screens
